@@ -37,11 +37,10 @@
 #include <opm/material/fluidmatrixinteractions/EclMaterialLawManager.hpp>
 #include <opm/material/fluidstates/SimpleModularFluidState.hpp>
 
-#include <opm/parser/eclipse/Parser/ParseContext.hpp>
-#include <opm/parser/eclipse/Parser/Parser.hpp>
-#include <opm/parser/eclipse/Deck/Deck.hpp>
-#include <opm/parser/eclipse/EclipseState/EclipseState.hpp>
-#include <opm/parser/eclipse/EclipseState/Grid/EclipseGrid.hpp>
+#include <opm/parser/eclipse/Parser.hpp>
+#include <opm/parser/eclipse/bits/Deck/Deck.hpp>
+#include <opm/parser/eclipse/bits/Parsers.hpp>
+#include <opm/parser/eclipse/EclipseState.hpp>
 
 #include <opm/common/utility/platform_dependent/disable_warnings.h>
 #include <dune/common/parallel/mpihelper.hh>
@@ -245,7 +244,7 @@ inline void testAll()
         typedef Opm::EclMaterialLawManager<MaterialTraits> MaterialLawManager;
         typedef typename MaterialLawManager::MaterialLaw MaterialLaw;
 
-        const auto deck = parser.parseString(fam1DeckString, parseContext);
+        const auto deck = Opm::ecl::parseDeckString(parser, fam1DeckString, parseContext);
         const Opm::EclipseState eclState(deck, parseContext);
         const auto& eclGrid = eclState.getInputGrid();
 
@@ -266,7 +265,7 @@ inline void testAll()
             OPM_THROW(std::logic_error,
                       "Discrepancy between the deck and the EclMaterialLawManager");
 
-        const auto fam2Deck = parser.parseString(fam2DeckString, parseContext);
+        const auto fam2Deck = Opm::ecl::parseDeckString(parser, fam2DeckString, parseContext);
         const Opm::EclipseState fam2EclState(fam2Deck, parseContext);
 
         Opm::EclMaterialLawManager<MaterialTraits> fam2MaterialLawManager;

@@ -50,9 +50,10 @@
 #include <opm/material/fluidsystems/BlackOilFluidSystem.hpp>
 
 #include <opm/parser/eclipse/Parser/ParseContext.hpp>
-#include <opm/parser/eclipse/Parser/Parser.hpp>
-#include <opm/parser/eclipse/Deck/Deck.hpp>
-#include <opm/parser/eclipse/EclipseState/EclipseState.hpp>
+#include <opm/parser/eclipse/Parser.hpp>
+#include <opm/parser/eclipse/bits/Parsers.hpp>
+#include <opm/parser/eclipse/bits/Deck/Deck.hpp>
+#include <opm/parser/eclipse/EclipseState.hpp>
 
 #include <opm/common/utility/platform_dependent/disable_warnings.h>
 #include <dune/common/parallel/mpihelper.hh>
@@ -230,7 +231,7 @@ inline void testAll()
     Opm::Parser parser;
     Opm::ParseContext parseContext;
 
-    auto deck = parser.parseString(deckString1, parseContext);
+    auto deck = Opm::ecl::parseDeckString(parser, deckString1, parseContext);
     Opm::EclipseState eclState(deck, parseContext);
 
     const auto& pvtwKeyword = deck.getKeyword("PVTW");
